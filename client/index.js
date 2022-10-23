@@ -1,12 +1,16 @@
-// uncomment so that webpack can bundle styles
 import styles from './scss/application.scss';
-
-import { init, customComponent } from "./components/components.js";
+import { init, customComponent, keyboard } from "./components/components.js";
 import * as tone from 'tone';
 
-const myToneCode = () => {
-  const synth = new tone.Synth().toDestination();
-  synth?.triggerAttackRelease('C4', '8n');
+
+const synth = new tone.Synth().toDestination();
+
+const playNote = () => {
+  synth?.triggerAttack('F3');
+}
+
+const releaseNote = () => {
+  synth?.triggerRelease();
 }
 
 const myToneCode2 = () => {
@@ -59,7 +63,12 @@ const myToneCode3 = () => {
 // click before triggering any ToneJS code – this prevents a runtime error
 init(); 
 
-// @params: custom code to trigger on event, element type, event to trigger custom code
-customComponent([{ code: myToneCode }], 'button', 'click me');
+/* @param: array of objects containing custom code to trigger on event and optional event type (defaults to click), 
+ *   Array<{ code: Function, eventType: string}>
+ * @param: element type (defaults to button)
+ * @param: element text (defaults to empty string)
+ */
+customComponent([{ code: playNote, eventType: 'mousedown' }, { code: releaseNote, eventType: 'mouseup' }], 'button', 'click me');
 customComponent([{ code: myToneCode2, eventType: 'mouseover' }], 'div', 'mouse me');
 customComponent([{ code: myToneCode3 }], 'button', ';)');
+keyboard(['Bb2', 'C3', 'D3', 'E3', 'F#3', 'G#3', 'Bb3']);
